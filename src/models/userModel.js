@@ -47,3 +47,6 @@ const userSchema = new Schema({
 const User = mongoose.models.User || mongoose.model('User', userSchema);
 
 export default User;
+
+// mongoose.models.User : we do this because everytime db call is made, the model is reloaded in the memory and 
+// if we don't store the model in the variable, it will create a new model every time, which will cause errors
