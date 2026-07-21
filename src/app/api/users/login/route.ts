@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
         }
 
         // creting token 
-        const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET!, { expiresIn: '1d' });
+        const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, { expiresIn: '1h' });
 
         // set this token in user's cookie or local storage on the client side for future authenticated requests
         const response = NextResponse.json({
