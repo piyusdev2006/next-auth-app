@@ -2,6 +2,7 @@ import { connectToDatabase } from '@/dbConfig/dbConfig';
 import User from '@/models/userModel';
 import { NextResponse, NextRequest } from 'next/server';
 import bcrypt from 'bcryptjs';
+import { sendEmail } from '@/helpers/mailer';
 
 export async function POST(request: NextRequest) {
     try {
@@ -35,6 +36,9 @@ export async function POST(request: NextRequest) {
         const savedUser = await newUser.save();
         console.log('Saved user:', savedUser);
 
+        // send email before returning the response
+        await sendEmail({ email, emailType: 'VERIFY', userId: savedUser._id });
+
         return NextResponse.json({
             message: 'User created successfully',
             user: savedUser,
@@ -42,7 +46,7 @@ export async function POST(request: NextRequest) {
         }, { status: 201 });
 
     } catch (error: any) {
-        console.error('Error occurred while creating the user:', error);
+        console.error('Error occurred while creating the user:', error);  
         return NextResponse.json({
             message: 'Error occurred while creating the user',
             error: error.message,
